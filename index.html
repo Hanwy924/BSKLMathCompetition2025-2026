@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Math House Competition</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+          url("https://lh3.googleusercontent.com/pw/AP1GczNEQikXcmZ4wBcACO0uYogHm0dv-7BsXHXRbg-q3q-cy4GshZ_P84FTgCQ2FdzWM87kDOWvqZxuEbLz5Kt8F3Sj0fEtBZg8dWSNjnoMchfNBKXMPTtA21-88KbXbLSnrjz7iHjYy0XAC23Jkg1FbWs=w1974-h1106-s-no-gm?authuser=0")
+            center/cover fixed no-repeat;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        color: #f0f0f0;
+      }
+
+      .main-content {
+        flex: 1;
+      }
+
+      /* Hero Section */
+      .hero {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        text-align: center;
+      }
+
+      .hero h1 {
+        font-size: 3rem;
+        color: #ffffff;
+        text-shadow: 2px 2px 8px black;
+        margin-bottom: 30px;
+      }
+
+      .glow-button {
+        display: inline-block;
+        padding: 16px 36px;
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: white;
+        background: linear-gradient(
+          45deg,
+          #ff0000,
+          #00ff00,
+          #ffff00,
+          #0000ff,
+          #ff0000
+        );
+        background-size: 300% 300%;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.4s ease;
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        animation: gradientMove 4s ease infinite;
+      }
+
+      .glow-button:hover {
+        transform: translateY(-4px) scale(1.05);
+        box-shadow: 0 0 25px rgba(255, 255, 255, 0.9);
+      }
+
+      @keyframes gradientMove {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Sections */
+      .section {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 40px;
+        padding: 80px 20px;
+        max-width: 1200px;
+        margin: auto;
+        align-items: center;
+      }
+
+      .section img {
+        max-width: 100%;
+        border-radius: 12px;
+      }
+
+      .section-content {
+        flex: 1;
+        background: rgba(0, 0, 0, 0.45);
+        padding: 25px;
+        border-radius: 12px;
+      }
+
+      .highlight-left {
+        border-left: 6px solid #ffd60a;
+      }
+
+      .highlight-right {
+        border-right: 6px solid #ff4d4d;
+        text-align: right;
+      }
+
+      .footer {
+        text-align: center;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.7);
+        font-size: 0.95rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-content">
+      <div class="hero">
+        <h1>BSKL Math House Competition 2025-2026</h1>
+        <a href="house.html" class="glow-button">Start</a>
+      </div>
+
+      <div class="section">
+        <div class="section-content highlight-left">
+          <h1>What's the Math House Competition All About?</h1>
+          <p>
+            <strong>House vs. House Battle:</strong> Join your house,
+            <span style="color: #ff4d4d">Norman</span>,
+            <span style="color: #00ff00">Saxon</span>,
+            <span style="color: #ffd60a">Viking</span>, or
+            <span style="color: #0000ff">Roman</span> ,in an epic mathematical
+            competition!<br /><br />
+            <strong>KS3 & KS4 Categories:</strong> We’ve organized the
+            competition by key stages level for fairer, more exciting
+            matches.<br /><br />
+            <strong>Solve to Score:</strong> Every math problem you solve earns
+            valuable points for your house. The more you solve, the higher your
+            house climbs on the leaderboard!
+          </p>
+        </div>
+        <div>
+          <img
+            src="https://cdn4.iconfinder.com/data/icons/essentials-volume-6/128/rubiks-2-512.png"
+            width="320"
+            alt="Rubik's Cube"
+          />
+        </div>
+      </div>
+
+      <div class="section">
+        <div>
+          <img
+            src="https://img.icons8.com/fluent-systems-regular/512/FFFFFF/info.png"
+            width="360"
+            alt="Information Icon"
+          />
+        </div>
+        <div class="section-content highlight-right">
+          <h1>How to Use This Website?</h1>
+          <p>
+            <strong>Click Start:</strong> Choose your your house and key
+            stage.<br /><br />
+            <strong>Password:</strong> Your year group + house password has been
+            emailed to you.<br /><br />
+            <strong>Enjoy!</strong> Each question could be a challenge, a trick,
+            or a test of skill. Work hard and have fun!
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">BSKL Math House Competition 2025-2026</div>
+  </body>
+</html>

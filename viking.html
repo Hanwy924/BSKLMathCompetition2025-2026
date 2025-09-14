@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Viking House - Key Stage Selection</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Montserrat", sans-serif;
+        background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
+          url("https://lh3.googleusercontent.com/pw/AP1GczNEQikXcmZ4wBcACO0uYogHm0dv-7BsXHXRbg-q3q-cy4GshZ_P84FTgCQ2FdzWM87kDOWvqZxuEbLz5Kt8F3Sj0fEtBZg8dWSNjnoMchfNBKXMPTtA21-88KbXbLSnrjz7iHjYy0XAC23Jkg1FbWs=w1974-h1106-s-no-gm?authuser=080");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        color: white;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .container {
+        max-width: 900px;
+        width: 100%;
+        padding: 40px;
+        background: rgba(50, 30, 0, 0.85);
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+        border: 1px solid rgba(255, 215, 0, 0.4);
+        backdrop-filter: blur(10px);
+      }
+
+      h1 {
+        font-size: 3rem;
+        margin-bottom: 10px;
+        color: #facc15; /* bright yellow */
+      }
+
+      .subtitle {
+        font-size: 1.2rem;
+        color: #fde68a;
+        margin-bottom: 10px;
+      }
+
+      .options-container {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+        margin-top: 40px;
+      }
+
+      .option-card {
+        background: linear-gradient(
+          135deg,
+          rgba(80, 50, 0, 0.9),
+          rgba(40, 20, 0, 0.9)
+        );
+        border-radius: 15px;
+        padding: 30px 25px;
+        width: 220px;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(255, 215, 0, 0.4);
+      }
+
+      .option-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(250, 204, 21, 0.7);
+        border-color: rgba(255, 215, 0, 0.8);
+      }
+
+      .option-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: #facc15;
+      }
+
+      .option-description {
+        font-size: 0.9rem;
+        color: #fef9c3;
+        margin-bottom: 20px;
+        line-height: 1.5;
+      }
+
+      .option-link {
+        display: inline-block;
+        padding: 12px 30px;
+        background: linear-gradient(to right, #fbbf24, #facc15);
+        color: black;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 700;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.6);
+      }
+
+      .option-link:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(250, 204, 21, 0.9);
+        background: linear-gradient(to right, #facc15, #fbbf24);
+      }
+
+      .footer {
+        margin-top: 50px;
+        color: #fde68a;
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 768px) {
+        .options-container {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .option-card {
+          width: 100%;
+          max-width: 300px;
+        }
+
+        h1 {
+          font-size: 2.5rem;
+        }
+      }
+
+      .glow-button {
+        padding: 12px 28px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: black;
+        background: linear-gradient(
+          45deg,
+          #facc15 0%,
+          #fbbf24 25%,
+          #fde68a 50%,
+          #facc15 75%,
+          #fbbf24 100%
+        );
+        background-size: 300% 300%;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s ease;
+        box-shadow: 0 0 10px rgba(250, 204, 21, 0.6),
+          0 0 10px rgba(255, 223, 100, 0.6), 0 0 10px rgba(255, 255, 200, 0.6);
+        text-shadow: 1px 1px 2px rgba(255, 255, 200, 0.8);
+        animation: gradientMove 4s ease infinite;
+      }
+
+      .glow-button:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 0 25px rgba(250, 204, 21, 0.9),
+          0 0 25px rgba(255, 223, 100, 0.9);
+        animation: gradientMove 1.5s ease infinite;
+      }
+
+      .glow-button:active {
+        transform: translateY(2px);
+        box-shadow: 0 0 10px rgba(250, 204, 21, 0.6);
+      }
+
+      @keyframes gradientMove {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Choose Your Key Stage</h1>
+      <p class="subtitle">Viking</p>
+    </div>
+
+    <div class="options-container">
+      <div class="option-card">
+        <h2 class="option-title">KS3</h2>
+        <p class="option-description">For students in Years 7, 8, and 9.</p>
+        <a href="vks3.html" class="option-link">Select KS3</a>
+      </div>
+
+      <div class="option-card">
+        <h2 class="option-title">KS4</h2>
+        <p class="option-description">For students in Years 10 and 11.</p>
+        <a href="vks4.html" class="option-link">Select KS4</a>
+      </div>
+
+      <div class="option-card">
+        <h2 class="option-title">KS5</h2>
+        <p class="option-description">For students in Sixth Form.</p>
+        <a href="vks5.html" class="option-link">Select KS5</a>
+      </div>
+    </div>
+
+    <br /><br /><br /><br />
+    <a href="house.html" class="glow-button">Back</a>
+
+    <div class="footer">
+      <p>BSKL Math House Competition 2025-2026</p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel</title>
+    <style>
+      :root {
+        --red: #ff4d4d;
+        --blue: #4d79ff;
+        --yellow: #ffd84d;
+        --green: #4dff88;
+        --dark-bg: #1e1e2e;
+        --card-bg: #2a2a40;
+        --text-light: #f0f0f0;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: var(--dark-bg);
+        color: var(--text-light);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        min-height: 100vh;
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        background: linear-gradient(
+          90deg,
+          var(--red),
+          var(--blue),
+          var(--yellow),
+          var(--green)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .login-box {
+        background: var(--card-bg);
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+        margin-top: 100px;
+      }
+
+      input[type="password"] {
+        padding: 10px;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        width: 200px;
+        margin-right: 10px;
+      }
+
+      button {
+        padding: 8px 14px;
+        border-radius: 8px;
+        border: none;
+        background: linear-gradient(90deg, var(--red), var(--blue));
+        color: white;
+        cursor: pointer;
+        font-weight: 600;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+        transition: transform 0.2s ease;
+      }
+      button:hover {
+        transform: scale(1.05);
+      }
+
+      .error {
+        color: var(--red);
+        margin-top: 10px;
+      }
+
+      .result-card {
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 16px;
+        margin: 12px 0;
+        width: 100%;
+        max-width: 800px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+        border-left: 6px solid;
+        position: relative;
+      }
+
+      .result-card.red {
+        border-color: var(--red);
+      }
+      .result-card.blue {
+        border-color: var(--blue);
+      }
+      .result-card.yellow {
+        border-color: var(--yellow);
+      }
+      .result-card.green {
+        border-color: var(--green);
+      }
+
+      .meta {
+        font-size: 0.9rem;
+        opacity: 0.8;
+        margin-bottom: 8px;
+      }
+
+      .answers {
+        font-family: monospace;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 8px;
+        border-radius: 8px;
+        overflow-x: auto;
+      }
+
+      .score {
+        font-weight: bold;
+        margin-top: 8px;
+      }
+
+      .delete-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: var(--red);
+        color: white;
+        border: none;
+        padding: 6px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.8rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Admin Panel</h1>
+
+    <!-- Login box -->
+    <div id="login" class="login-box">
+      <p>Enter admin password:</p>
+      <input type="password" id="adminPassword" placeholder="Password" />
+      <button onclick="checkPassword()">Login</button>
+      <div id="loginError" class="error"></div>
+    </div>
+
+    <!-- Results -->
+    <div id="results" style="display: none; margin-top: 20px">Loading...</div>
+
+    <script>
+      const ADMIN_PASS = "admin123"; // <--- change this
+      const DELETE_PASS = "delete456"; // <--- secondary password
+
+      function checkPassword() {
+        const input = document.getElementById("adminPassword").value.trim();
+        const errorBox = document.getElementById("loginError");
+        if (input === ADMIN_PASS) {
+          document.getElementById("login").style.display = "none";
+          document.getElementById("results").style.display = "block";
+          loadResults();
+          setInterval(loadResults, 5000);
+        } else {
+          errorBox.textContent = "Incorrect password.";
+        }
+      }
+
+      async function loadResults() {
+        try {
+          const res = await fetch("/results");
+          const data = await res.json();
+
+          const resultsDiv = document.getElementById("results");
+          resultsDiv.innerHTML = "";
+
+          if (data.length === 0) {
+            resultsDiv.textContent = "No correct submissions yet.";
+            return;
+          }
+
+          data.forEach((item, index) => {
+            const card = document.createElement("div");
+            card.className = "result-card";
+
+            // Assign theme color by KS
+            if (item.ks === "KS3") card.classList.add("red");
+            if (item.ks === "KS4") card.classList.add("blue");
+            if (item.ks === "KS2") card.classList.add("yellow");
+            if (item.ks === "KS5") card.classList.add("green");
+
+            card.innerHTML = `
+              <div class="meta">#${index + 1} • <strong>${item.ks}</strong> • ${
+              item.time
+            }</div>
+              <div class="answers">Answers: ${JSON.stringify(
+                item.answers
+              )}</div>
+              <div class="score">Score: ${item.score}</div>
+              <button class="delete-btn" onclick="deleteResult(${index})">Delete</button>
+            `;
+            resultsDiv.appendChild(card);
+          });
+        } catch (err) {
+          document.getElementById("results").textContent =
+            "No one got it correct yet...";
+        }
+      }
+
+      async function deleteResult(index) {
+        const pass = prompt("Enter delete password:");
+        if (pass !== DELETE_PASS) {
+          alert("Wrong delete password!");
+          return;
+        }
+
+        const res = await fetch("/delete", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ index }),
+        });
+
+        if (res.ok) {
+          alert("Result deleted!");
+          loadResults();
+        } else {
+          alert("Failed to delete result.");
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>House Selection</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-image: url("https://lh3.googleusercontent.com/pw/AP1GczNEQikXcmZ4wBcACO0uYogHm0dv-7BsXHXRbg-q3q-cy4GshZ_P84FTgCQ2FdzWM87kDOWvqZxuEbLz5Kt8F3Sj0fEtBZg8dWSNjnoMchfNBKXMPTtA21-88KbXbLSnrjz7iHjYy0XAC23Jkg1FbWs=w1974-h1106-s-no-gm?authuser=0");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-color: #0a0a1a;
+        color: white;
+        min-height: 100vh;
+        position: relative;
+        text-align: center;
+        padding: 20px;
+      }
+
+      body::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: -1;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 30px;
+        background: black;
+        border-radius: 20px;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        margin-top: 40px;
+      }
+
+      h1 {
+        font-size: 3.5rem;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        color: #fff;
+        letter-spacing: 2px;
+      }
+
+      .subtitle {
+        font-size: 1.4rem;
+        margin-bottom: 40px;
+        color: #d4af37;
+        font-weight: 300;
+      }
+
+      .houses-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+        margin-top: 30px;
+      }
+
+      .house-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .house-name {
+        font-size: 1.8rem;
+        margin-top: 15px;
+        color: #ffffff;
+        font-weight: bold;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+      }
+
+      .glow-button {
+        display: inline-block;
+        transition: all 0.3s ease;
+        border-radius: 50%;
+        padding: 10px;
+      }
+
+      .glow-button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 25px #ffcc00, 0 0 35px #ffcc00, 0 0 45px #ffcc00;
+        border-radius: 50%;
+      }
+
+      .glow-button img {
+        border-radius: 50%;
+        transition: all 0.3s ease;
+      }
+
+      .glow-button:hover img {
+        filter: brightness(1.2);
+      }
+
+      /* Different glow colors for each house */
+      .house-norman .glow-button:hover {
+        box-shadow: 0 0 25px #ff3333, 0 0 35px #ff3333, 0 0 45px #ff3333;
+      }
+
+      .house-roman .glow-button:hover {
+        box-shadow: 0 0 25px #3366ff, 0 0 35px #3366ff, 0 0 45px #3366ff;
+      }
+
+      .house-saxon .glow-button:hover {
+        box-shadow: 0 0 25px #33cc33, 0 0 35px #33cc33, 0 0 45px #33cc33;
+      }
+
+      .house-viking .glow-button:hover {
+        box-shadow: 0 0 25px #ff9900, 0 0 35px #ff9900, 0 0 45px #ff9900;
+      }
+
+      .footer {
+        margin-top: 50px;
+        color: #aaa;
+        font-size: 1rem;
+      }
+
+      /* Responsive design */
+      @media (max-width: 768px) {
+        .houses-grid {
+          grid-template-columns: 1fr;
+          gap: 30px;
+        }
+
+        h1 {
+          font-size: 2.5rem;
+        }
+
+        .subtitle {
+          font-size: 1.2rem;
+        }
+      }
+      /* The back button */
+      .back {
+        padding: 12px 28px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: white;
+        background: linear-gradient(
+          45deg,
+          #ff0000 0%,
+          #ffff00 25%,
+          #00ff00 50%,
+          #0000ff 75%,
+          #ff0000 100%
+        );
+        background-size: 300% 300%;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s ease;
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.5),
+          0 0 10px rgba(255, 255, 0, 0.5), 0 0 10px rgba(0, 255, 0, 0.5),
+          0 0 10px rgba(0, 0, 255, 0.5);
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        animation: gradientMove 4s ease infinite;
+      }
+
+      .back:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 0 25px rgba(255, 0, 0, 0.8),
+          0 0 25px rgba(255, 255, 0, 0.8), 0 0 25px rgba(0, 255, 0, 0.8),
+          0 0 25px rgba(0, 0, 255, 0.8);
+        animation: gradientMove 1.5s ease infinite;
+      }
+
+      .back:active {
+        transform: translateY(2px);
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.5),
+          0 0 10px rgba(255, 255, 0, 0.5), 0 0 10px rgba(0, 255, 0, 0.5),
+          0 0 10px rgba(0, 0, 255, 0.5);
+      }
+
+      .back::before {
+        content: "";
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+        background: inherit;
+        border-radius: 16px;
+        filter: blur(20px);
+        opacity: 0;
+        z-index: -1;
+        transition: opacity 0.4s ease;
+      }
+
+      .back:hover::before {
+        opacity: 0.7;
+      }
+
+      @keyframes gradientMove {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+      .footer {
+        margin-top: 50px;
+        color: #ffffff;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Choose Your House!</h1>
+
+      <div class="houses-grid">
+        <div class="house-item house-norman">
+          <a href="norman.html" class="glow-button">
+            <img
+              src="https://lh3.googleusercontent.com/pw/AP1GczOwj0aTBMa8g0Ju7tk0Mbz-MOD84vB4byVp4QoshFz3i7Tr86KMdVBdqIQZIU_o72ooXrUplCwKAV-BOaXhi0r60rR-POViDdDp21F_bDFFISuOJK7hOYtSv7-LaPqd4hrKfg0as5cCkWumt2ZZgPs=w1193-h1134-s-no-gm?authuser=0"
+              width="200"
+              border-radius:
+              50%;
+            />
+          </a>
+          <div class="house-name">Norman</div>
+        </div>
+
+        <div class="house-item house-roman">
+          <a href="roman.html" class="glow-button">
+            <img
+              src="https://lh3.googleusercontent.com/pw/AP1GczMYgPZq9CpvTHlcwOPf3kSki--2xvTQRfUkODoY2nB3NjJfe-oKpNCP-FqtgBT9aIsT6xcciVJzfRRmrf_ymsiuxWMd-HJJw_sWFtbN_6lUUSamXpLMmnElr5FSZKfqSwQmzkZJYcdZhVm_nV9c-oE=w816-h809-s-no-gm?authuser=0"
+              width="200"
+              border-radius:
+              50%;
+            />
+          </a>
+          <div class="house-name">Roman</div>
+        </div>
+
+        <div class="house-item house-saxon">
+          <a href="saxon.html" class="glow-button">
+            <img
+              src="https://lh3.googleusercontent.com/pw/AP1GczPxsl9nEYnz3BK_RUiYZHMWQwP2j5I7J_JrD2s1b-1CMF2SBGqsVTxHJ9D608ABE3BZwhTd1CiUR2EE7K-OWeDM6sVpYdhWaX-lhDnLSMPhbhvUJ8DkZJbtibE99gpnOnHS4sPOQkKM2IVLAmolWw0=w1044-h1036-s-no-gm?authuser=0"
+              width="200"
+              border-radius:
+              50%;
+            />
+          </a>
+          <div class="house-name">Saxon</div>
+        </div>
+
+        <div class="house-item house-viking">
+          <a href="viking.html" class="glow-button">
+            <img
+              src="https://lh3.googleusercontent.com/pw/AP1GczNrLc5YeqHh_2Axi_Iw0a9ZbPSUcTd-uaEAmVYAkpjpLVcU9oLL1MkCeHttYTrn1u9ohhQ5B_jJDev4n1XkOLiwhVxwVsOPwiNy7sxqyAVV8fw1gzlim7gpXZ-Aq_y-UGrktSbmPhLi0D-1uBNpWyI=w1183-h1157-s-no-gm?authuser=0"
+              width="200"
+              border-radius:
+              50%;
+            />
+          </a>
+          <div class="house-name">Viking</div>
+        </div>
+      </div>
+    </div>
+    <br /><br /><br />
+    <a href="index.html" class="back">Back</a>
+    <div class="footer">
+      <p>BSKL Math House Competition 2025-2026</p>
+    </div>
+  </body>
+</html>
