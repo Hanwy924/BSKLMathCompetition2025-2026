@@ -67,7 +67,7 @@
         <input type="text" id="studentName" placeholder="Your Name" />
 
         <div class="question">
-          <p><b>Q1:</b> Solve for x: 2x² – 5x – 3 = 0</p>
+          <p><b>Q1:</b> 1+1</p>
           <input
             type="text"
             id="q1"
@@ -99,7 +99,7 @@
     <script>
       const correctPassword = "nks3bskl";
       const correctAnswers = {
-        1: ["3,-0.5", "-0.5,3"], // allow both orders
+        1: ["2"], // allow both orders
         2: "5",
         3: "6",
       };
@@ -137,13 +137,20 @@
 
         if (correct) {
           alert("Correct! Your answer has been recorded.");
-          let results = JSON.parse(localStorage.getItem("ks3Results") || "[]");
-          results.push({
-            name: name,
-            question: qNum,
-            time: new Date().toLocaleString(),
-          });
-          localStorage.setItem("ks3Results", JSON.stringify(results));
+
+          fetch("https://quiz-backend-q4me.onrender.com/submit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              ks: "KS3", // so admin knows which set
+              name: name, // student’s name
+              question: qNum, // which question they answered
+              time: new Date().toISOString(),
+            }),
+          })
+            .then((res) => res.json())
+            .then((data) => console.log("Saved:", data))
+            .catch((err) => console.error("Error saving:", err));
         } else {
           alert("Incorrect, try again.");
         }
