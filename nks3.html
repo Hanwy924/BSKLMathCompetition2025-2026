@@ -126,8 +126,9 @@
 
         let correct = false;
         if (qNum === 1) {
-          correct = correctAnswers[1].includes(answer);
-        } else {
+        correct = answer === correctAnswers[1];
+        }
+        else {
           correct = answer === correctAnswers[qNum];
         }
 
