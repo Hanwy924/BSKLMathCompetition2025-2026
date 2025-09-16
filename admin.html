@@ -151,83 +151,77 @@
     <div id="results" style="display: none; margin-top: 20px">Loading...</div>
 
     <script>
-      const ADMIN_PASS = "admin123"; // <--- change this
-      const DELETE_PASS = "delete456"; // <--- secondary password
+  const ADMIN_PASS = "admin123";
+  const DELETE_PASS = "delete456";
 
-      function checkPassword() {
-        const input = document.getElementById("adminPassword").value.trim();
-        const errorBox = document.getElementById("loginError");
-        if (input === ADMIN_PASS) {
-          document.getElementById("login").style.display = "none";
-          document.getElementById("results").style.display = "block";
-          loadResults();
-          setInterval(loadResults, 5000);
-        } else {
-          errorBox.textContent = "Incorrect password.";
-        }
+  function checkPassword() {
+    const input = document.getElementById("adminPassword").value.trim();
+    const errorBox = document.getElementById("loginError");
+    if (input === ADMIN_PASS) {
+      document.getElementById("login").style.display = "none";
+      document.getElementById("results").style.display = "block";
+      loadResults();
+      setInterval(loadResults, 5000);
+    } else {
+      errorBox.textContent = "Incorrect password.";
+    }
+  }
+
+  async function loadResults() {
+    try {
+      const res = await fetch("https://quiz-backend-q4me.onrender.com/answers");
+      const data = await res.json();
+
+      const resultsDiv = document.getElementById("results");
+      resultsDiv.innerHTML = "";
+
+      if (data.length === 0) {
+        resultsDiv.textContent = "No submissions yet.";
+        return;
       }
 
-      async function loadResults() {
-        try {
-          const res = await fetch("/results");
-          const data = await res.json();
+      data.forEach((item, index) => {
+        const card = document.createElement("div");
+        card.className = "result-card";
 
-          const resultsDiv = document.getElementById("results");
-          resultsDiv.innerHTML = "";
+        // Assign theme color by KS
+        if (item.ks === "KS3") card.classList.add("red");
+        if (item.ks === "KS4") card.classList.add("blue");
+        if (item.ks === "KS2") card.classList.add("yellow");
+        if (item.ks === "KS5") card.classList.add("green");
 
-          if (data.length === 0) {
-            resultsDiv.textContent = "No correct submissions yet.";
-            return;
-          }
+        card.innerHTML = `
+          <div class="meta">#${index + 1} • <strong>${item.ks}</strong> • ${new Date(item.timestamp).toLocaleString()}</div>
+          <div class="answers">Q${item.questionNumber}: ${item.answer}</div>
+          <button class="delete-btn" onclick="deleteResult(${index})">Delete</button>
+        `;
+        resultsDiv.appendChild(card);
+      });
+    } catch (err) {
+      document.getElementById("results").textContent =
+        "Error loading results.";
+    }
+  }
 
-          data.forEach((item, index) => {
-            const card = document.createElement("div");
-            card.className = "result-card";
+  async function deleteResult(index) {
+    const pass = prompt("Enter delete password:");
+    if (pass !== DELETE_PASS) {
+      alert("Wrong delete password!");
+      return;
+    }
 
-            // Assign theme color by KS
-            if (item.ks === "KS3") card.classList.add("red");
-            if (item.ks === "KS4") card.classList.add("blue");
-            if (item.ks === "KS2") card.classList.add("yellow");
-            if (item.ks === "KS5") card.classList.add("green");
+    const res = await fetch(`https://quiz-backend-q4me.onrender.com/delete/${index}`, {
+      method: "DELETE"
+    });
 
-            card.innerHTML = `
-              <div class="meta">#${index + 1} • <strong>${item.ks}</strong> • ${
-              item.time
-            }</div>
-              <div class="answers">Answers: ${JSON.stringify(
-                item.answers
-              )}</div>
-              <div class="score">Score: ${item.score}</div>
-              <button class="delete-btn" onclick="deleteResult(${index})">Delete</button>
-            `;
-            resultsDiv.appendChild(card);
-          });
-        } catch (err) {
-          document.getElementById("results").textContent =
-            "No one got it correct yet...";
-        }
-      }
+    if (res.ok) {
+      alert("Result deleted!");
+      loadResults();
+    } else {
+      alert("Failed to delete result.");
+    }
+  }
+</script>
 
-      async function deleteResult(index) {
-        const pass = prompt("Enter delete password:");
-        if (pass !== DELETE_PASS) {
-          alert("Wrong delete password!");
-          return;
-        }
-
-        const res = await fetch("/delete", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ index }),
-        });
-
-        if (res.ok) {
-          alert("Result deleted!");
-          loadResults();
-        } else {
-          alert("Failed to delete result.");
-        }
-      }
-    </script>
   </body>
 </html>
