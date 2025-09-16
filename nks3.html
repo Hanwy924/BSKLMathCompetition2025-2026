@@ -97,64 +97,64 @@
     </div>
 
     <script>
-      const correctPassword = "nks3bskl";
-      const correctAnswers = {
-        1: ["2"], // allow both orders
-        2: "5",
-        3: "6",
-      };
+  const correctPassword = "nks3bskl";
+  const correctAnswers = {
+    1: ["2"],
+    2: "5",
+    3: "6",
+  };
 
-      function checkPassword() {
-        const input = document.getElementById("passwordInput").value.trim();
-        const error = document.getElementById("error");
-        if (input === correctPassword) {
-          document.getElementById("questions").classList.remove("hidden");
-          document.getElementById("passwordInput").style.display = "none";
-          error.textContent = "";
-        } else {
-          error.textContent = "Incorrect password.";
-        }
-      }
+  function checkPassword() {
+    const input = document.getElementById("passwordInput").value.trim();
+    const error = document.getElementById("error");
+    if (input === correctPassword) {
+      document.getElementById("questions").classList.remove("hidden");
+      document.getElementById("passwordInput").style.display = "none";
+      error.textContent = "";
+    } else {
+      error.textContent = "Incorrect password.";
+    }
+  }
 
-      function checkAnswer(qNum) {
-        const name = document.getElementById("studentName").value.trim();
-        if (!name) {
-          alert("Enter your name first!");
-          return;
-        }
-        const answer = document.getElementById("q" + qNum).value.trim();
-        if (!answer) {
-          alert("Enter an answer!");
-          return;
-        }
+  function checkAnswer(qNum) {
+    const name = document.getElementById("studentName").value.trim();
+    if (!name) {
+      alert("Enter your name first!");
+      return;
+    }
+    const answer = document.getElementById("q" + qNum).value.trim();
+    if (!answer) {
+      alert("Enter an answer!");
+      return;
+    }
 
-        let correct = false;
-        if (qNum === 1) {
-          correct = correctAnswers[1].includes(answer);
-        } else {
-          correct = answer === correctAnswers[qNum];
-        }
+    let correct = false;
+    if (qNum === 1) {
+      correct = correctAnswers[1].includes(answer);
+    } else {
+      correct = answer === correctAnswers[qNum];
+    }
 
-        if (correct) {
-          alert("Correct! Your answer has been recorded.");
+    if (correct) {
+      alert("Correct! Your answer has been recorded.");
 
-          fetch("https://quiz-backend-q4me.onrender.com/submit", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              ks: "KS3", // so admin knows which set
-              name: name, // student’s name
-              question: qNum, // which question they answered
-              time: new Date().toISOString(),
-            }),
-          })
-            .then((res) => res.json())
-            .then((data) => console.log("Saved:", data))
-            .catch((err) => console.error("Error saving:", err));
-        } else {
-          alert("Incorrect, try again.");
-        }
-      }
-    </script>
+      fetch("https://quiz-backend-q4me.onrender.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ks: "KS3",              // matches backend
+          questionNumber: qNum,   // backend expects this
+          answer: answer          // backend expects this
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => console.log("Saved:", data))
+        .catch((err) => console.error("Error saving:", err));
+    } else {
+      alert("Incorrect, try again.");
+    }
+  }
+</script>
+
   </body>
 </html>
