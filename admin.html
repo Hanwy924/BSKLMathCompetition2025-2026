@@ -6,10 +6,10 @@
     <title>Admin Panel</title>
     <style>
       :root {
-        --red: #ff4d4d;
-        --blue: #4d79ff;
-        --yellow: #ffd84d;
-        --green: #4dff88;
+        --red: #ff4d4d;     /* Norman */
+        --blue: #4d79ff;    /* Roman */
+        --yellow: #ffd84d;  /* Viking */
+        --green: #4dff88;   /* Saxon */
         --dark-bg: #1e1e2e;
         --card-bg: #2a2a40;
         --text-light: #f0f0f0;
@@ -33,9 +33,9 @@
         background: linear-gradient(
           90deg,
           var(--red),
-          var(--blue),
           var(--yellow),
-          var(--green)
+          var(--green),
+          var(--blue)
         );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -90,18 +90,10 @@
         position: relative;
       }
 
-      .result-card.red {
-        border-color: var(--red);
-      }
-      .result-card.blue {
-        border-color: var(--blue);
-      }
-      .result-card.yellow {
-        border-color: var(--yellow);
-      }
-      .result-card.green {
-        border-color: var(--green);
-      }
+      .result-card.red { border-color: var(--red); }
+      .result-card.yellow { border-color: var(--yellow); }
+      .result-card.green { border-color: var(--green); }
+      .result-card.blue { border-color: var(--blue); }
 
       .meta {
         font-size: 0.9rem;
@@ -115,11 +107,6 @@
         padding: 8px;
         border-radius: 8px;
         overflow-x: auto;
-      }
-
-      .score {
-        font-weight: bold;
-        margin-top: 8px;
       }
 
       .delete-btn {
@@ -151,77 +138,76 @@
     <div id="results" style="display: none; margin-top: 20px">Loading...</div>
 
     <script>
-  const ADMIN_PASS = "admin123";
-  const DELETE_PASS = "delete456";
+      const ADMIN_PASS = "admin123";
+      const DELETE_PASS = "delete456";
 
-  function checkPassword() {
-    const input = document.getElementById("adminPassword").value.trim();
-    const errorBox = document.getElementById("loginError");
-    if (input === ADMIN_PASS) {
-      document.getElementById("login").style.display = "none";
-      document.getElementById("results").style.display = "block";
-      loadResults();
-      setInterval(loadResults, 5000);
-    } else {
-      errorBox.textContent = "Incorrect password.";
-    }
-  }
-
-  async function loadResults() {
-    try {
-      const res = await fetch("https://quiz-backend-q4me.onrender.com/answers");
-      const data = await res.json();
-
-      const resultsDiv = document.getElementById("results");
-      resultsDiv.innerHTML = "";
-
-      if (data.length === 0) {
-        resultsDiv.textContent = "No submissions yet.";
-        return;
+      function checkPassword() {
+        const input = document.getElementById("adminPassword").value.trim();
+        const errorBox = document.getElementById("loginError");
+        if (input === ADMIN_PASS) {
+          document.getElementById("login").style.display = "none";
+          document.getElementById("results").style.display = "block";
+          loadResults();
+          setInterval(loadResults, 5000);
+        } else {
+          errorBox.textContent = "Incorrect password.";
+        }
       }
 
-      data.forEach((item, index) => {
-        const card = document.createElement("div");
-        card.className = "result-card";
+      async function loadResults() {
+        try {
+          const res = await fetch("https://quiz-backend-q4me.onrender.com/answers");
+          const data = await res.json();
 
-        // Assign theme color by KS
-        if (item.ks === "KS3") card.classList.add("red");
-        if (item.ks === "KS4") card.classList.add("blue");
-        if (item.ks === "KS2") card.classList.add("yellow");
-        if (item.ks === "KS5") card.classList.add("green");
+          const resultsDiv = document.getElementById("results");
+          resultsDiv.innerHTML = "";
 
-        card.innerHTML = `
-          <div class="meta">#${index + 1} • <strong>${item.ks}</strong> • ${new Date(item.timestamp).toLocaleString()}</div>
-          <div class="answers">Q${item.questionNumber}: ${item.answer}</div>
-          <button class="delete-btn" onclick="deleteResult(${index})">Delete</button>
-        `;
-        resultsDiv.appendChild(card);
-      });
-    } catch (err) {
-      document.getElementById("results").textContent =
-        "Error loading results.";
-    }
-  }
+          if (data.length === 0) {
+            resultsDiv.textContent = "No submissions yet.";
+            return;
+          }
 
-  async function deleteResult(index) {
-    const pass = prompt("Enter delete password:");
-    if (pass !== DELETE_PASS) {
-      alert("Wrong delete password!");
-      return;
-    }
+          data.forEach((item, index) => {
+            const card = document.createElement("div");
+            card.className = "result-card";
 
-    const res = await fetch(`https://quiz-backend-q4me.onrender.com/delete/${index}`, {
-      method: "DELETE"
-    });
+            // Color by House
+            if (item.house === "Norman") card.classList.add("red");
+            if (item.house === "Viking") card.classList.add("yellow");
+            if (item.house === "Saxon") card.classList.add("green");
+            if (item.house === "Roman") card.classList.add("blue");
 
-    if (res.ok) {
-      alert("Result deleted!");
-      loadResults();
-    } else {
-      alert("Failed to delete result.");
-    }
-  }
-</script>
+            card.innerHTML = `
+              <div class="meta">#${index + 1} • <strong>${item.house}</strong> • ${new Date(item.timestamp).toLocaleString()}</div>
+              <div class="answers">👤 ${item.name || "Unknown"} <br> Q${item.questionNumber}: ${item.answer}</div>
+              <button class="delete-btn" onclick="deleteResult(${index})">Delete</button>
+            `;
+            resultsDiv.appendChild(card);
+          });
+        } catch (err) {
+          document.getElementById("results").textContent =
+            "Error loading results.";
+        }
+      }
 
+      async function deleteResult(index) {
+        const pass = prompt("Enter delete password:");
+        if (pass !== DELETE_PASS) {
+          alert("Wrong delete password!");
+          return;
+        }
+
+        const res = await fetch(`https://quiz-backend-q4me.onrender.com/delete/${index}`, {
+          method: "DELETE"
+        });
+
+        if (res.ok) {
+          alert("Result deleted!");
+          loadResults();
+        } else {
+          alert("Failed to delete result.");
+        }
+      }
+    </script>
   </body>
 </html>
