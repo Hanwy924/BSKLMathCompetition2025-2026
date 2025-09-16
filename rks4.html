@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Roman KS4 Questions</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
+          url("https://upload.wikimedia.org/wikipedia/commons/f/f3/Roman_Mosaic_Pattern.jpg")
+            no-repeat center center fixed;
+        background-size: cover;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+      }
+      .card {
+        background: rgba(0, 0, 40, 0.85);
+        padding: 30px;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 700px;
+        box-shadow: 0 0 20px rgba(0, 0, 255, 0.6);
+      }
+      h1 {
+        color: #3399ff;
+        text-align: center;
+      }
+      input,
+      button {
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 6px;
+        border: none;
+      }
+      input {
+        width: 100%;
+        border: 1px solid #3399ff;
+      }
+      button {
+        background: #3399ff;
+        color: black;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s ease;
+      }
+      button:hover {
+        background: #0077ff;
+        transform: scale(1.05);
+      }
+      .hidden {
+        display: none;
+      }
+      .question {
+        margin-top: 20px;
+        padding: 15px;
+        border: 1px solid #3399ff;
+        border-radius: 8px;
+        background: rgba(0, 0, 80, 0.5);
+      }
+      #error {
+        color: #ff4d6d;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>Roman KS4 Questions</h1>
+      <p id="hide">Enter password to unlock:</p>
+      <input type="password" id="passwordInput" placeholder="Password" />
+      <button onclick="checkPassword()" id="hided">Submit</button>
+      <p id="error"></p>
+
+      <div id="questions" class="hidden">
+        <p>Enter your name:</p>
+        <input type="text" id="studentName" placeholder="Your Name" />
+
+        <div class="question">
+          <p><b>Q1:</b></p>
+          <input type="text" id="q1" placeholder="Type in the answer here!" />
+          <button onclick="checkAnswer(1)">Submit Q1</button>
+        </div>
+
+        <div class="question">
+          <p><b>Q2:</b></p>
+          <input type="number" id="q2" placeholder="Type in the answer here!" />
+          <button onclick="checkAnswer(2)">Submit Q2</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const correctPassword = "rks4bskl"; // 🔑 Roman password
+      const correctAnswers = {
+        1: "?",
+        2: "?",
+      };
+
+      function checkPassword() {
+        const input = document.getElementById("passwordInput").value.trim();
+        const error = document.getElementById("error");
+        if (input === correctPassword) {
+          document.getElementById("questions").classList.remove("hidden");
+          document.getElementById("hide").style.display = "none";
+          document.getElementById("hided").style.display = "none";
+          document.getElementById("passwordInput").style.display = "none";
+          error.textContent = "";
+        } else {
+          error.textContent = "Incorrect password.";
+        }
+      }
+
+      function checkAnswer(qNum) {
+        const name = document.getElementById("studentName").value.trim();
+        if (!name) {
+          alert("Enter your name first!");
+          return;
+        }
+        const answer = document.getElementById("q" + qNum).value.trim();
+        if (!answer) {
+          alert("Enter an answer!");
+          return;
+        }
+
+        let correct = false;
+        if (qNum === 1) {
+          correct = correctAnswers[1].includes(answer);
+        } else {
+          correct = answer === correctAnswers[qNum];
+        }
+
+        if (correct) {
+          alert("Correct! Your answer has been recorded.");
+          fetch("https://quiz-backend-q4me.onrender.com/submit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name: name,
+              house: "Roman",
+              ks: "KS4",
+              questionNumber: qNum,
+              answer: answer,
+            }),
+          })
+            .then((res) => res.json())
+            .then((data) => console.log("Saved:", data))
+            .catch((err) => console.error("Error saving:", err));
+        } else {
+          alert("Incorrect, try again.");
+        }
+      }
+    </script>
+  </body>
+</html>
