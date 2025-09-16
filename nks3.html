@@ -87,94 +87,71 @@
     </div>
 
     <script>
-  const correctPassword = "nks3bskl";
-  const correctAnswers = {
-    1: "114",
-    2: "?",
-  };
+      const correctPassword = "nks3bskl";
+      const correctAnswers = {
+        1: "?",
+        2: "?",
+      };
 
-  // Normalize text: NFKC (converts full-width digits), collapse spaces, remove NBSPs
-  function normalizeStr(s){
-    if (s === undefined || s === null) s = "";
-    if (typeof s !== "string") s = String(s);
-    try { s = s.normalize("NFKC"); } catch (e) { /* old browsers */ }
-    s = s.replace(/\u00A0/g, " ");          // replace NBSP
-    s = s.replace(/\s+/g, " ").trim();      // collapse whitespace & trim
-    return s;
-  }
+      function checkPassword() {
+        const input = document.getElementById("passwordInput").value.trim();
+        const error = document.getElementById("error");
+        const hide = document.getElementById("hide");
+        const hided = document.getElementById("hided")
+        if (input === correctPassword) {
+          document.getElementById("questions").classList.remove("hidden");
+          const element = document.getElementById('hide');
+          element.style.display = 'none';
+          const hi = document.getElementById('hided');
+          hi.style.display = 'none';
 
-  function checkPassword() {
-    const input = document.getElementById("passwordInput").value.trim();
-    const error = document.getElementById("error");
-    if (input === correctPassword) {
-      document.getElementById("questions").classList.remove("hidden");
-      document.getElementById('hide').style.display = 'none';
-      document.getElementById('hided').style.display = 'none';
-      document.getElementById("passwordInput").style.display = "none";
-      error.textContent = "";
-    } else {
-      error.textContent = "Incorrect password.";
-    }
-  }
+          document.getElementById("passwordInput").style.display = "none";
+          error.textContent = "";
+        } else {
+          error.textContent = "Incorrect password.";
+        }
+      }
 
-  function checkAnswer(qNum) {
-    const name = document.getElementById("studentName").value.trim();
-    if (!name) {
-      alert("Enter your name first!");
-      return;
-    }
-    const raw = document.getElementById("q" + qNum).value;
-    if (!raw) {
-      alert("Enter an answer!");
-      return;
-    }
+      function checkAnswer(qNum) {
+        const name = document.getElementById("studentName").value.trim();
+        if (!name) {
+          alert("Enter your name first!");
+          return;
+        }
+        const answer = document.getElementById("q" + qNum).value.trim();
+        if (!answer) {
+          alert("Enter an answer!");
+          return;
+        }
 
-    const answer = normalizeStr(raw);
-    const correctRaw = correctAnswers[qNum];
-    const correct = normalizeStr(correctRaw === undefined ? "" : correctRaw);
+        let correct = false;
+        if (qNum === 1) {
+          correct = correctAnswers[1].includes(answer);
+        } else {
+          correct = answer === correctAnswers[qNum];
+        }
 
-    // Debug: inspect what's being compared (open DevTools Console)
-    console.log("Comparing answers:", {
-      qNum,
-      raw: JSON.stringify(raw),
-      answer: JSON.stringify(answer),
-      correctRaw: JSON.stringify(correctRaw),
-      correct: JSON.stringify(correct)
-    });
+        if (correct) {
+          alert("Correct! Your answer has been recorded.");
 
-    let isCorrect = false;
-
-    // If both look numeric, compare numerically (handles "114", "114.0", etc.)
-    const ansNum = Number(answer.replace(/,/g, ""));
-    const corNum = Number(correct.replace(/,/g, ""));
-    if (!Number.isNaN(ansNum) && !Number.isNaN(corNum)) {
-      isCorrect = ansNum === corNum;
-    } else {
-      // Otherwise compare case-insensitive strings
-      isCorrect = answer.toLowerCase() === correct.toLowerCase();
-    }
-
-    if (isCorrect) {
-      alert("Correct! Your answer has been recorded.");
-      fetch("https://quiz-backend-q4me.onrender.com/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: name,
-          house: "Norman",
-          ks: "KS3",
-          questionNumber: qNum,
-          answer: raw,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => console.log("Saved:", data))
-        .catch((err) => console.error("Error saving:", err));
-    } else {
-      alert("Incorrect, try again.");
-    }
-  }
-</script>
-
+          fetch("https://quiz-backend-q4me.onrender.com/submit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name: name,
+              house: "Norman",
+              ks: "KS3",
+              questionNumber: qNum,
+              answer: answer,
+            }),
+          })
+            .then((res) => res.json())
+            .then((data) => console.log("Saved:", data))
+            .catch((err) => console.error("Error saving:", err));
+        } else {
+          alert("Incorrect, try again.");
+        }
+      }
+    </script>
   </body>
 </html>
