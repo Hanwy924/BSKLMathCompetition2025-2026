@@ -84,7 +84,7 @@
           <img
             src="https://hive.forms.usercontent.microsoft/images/7fc9707b-9d8f-4f6a-856b-aeb848fef103/cf84f779-1549-46c7-b9fc-41a605f4a2bd/T13EN5HWYT2MKARPQW0371M53W/b775dcd0-b95e-4fe5-b8aa-3667589b8a4a"
           />
-          <input type="text" id="q1" placeholder="Type in the answer here!" />
+          <input type="text" id="q1" placeholder="Type in the answer here! (Input note: type in answer in the format of (a;b), write it in decimal form." />
           <button onclick="checkAnswer(1)">Submit Q1</button>
         </div>
 
@@ -93,7 +93,7 @@
           <img
             src="https://hive.forms.usercontent.microsoft/images/7fc9707b-9d8f-4f6a-856b-aeb848fef103/cf84f779-1549-46c7-b9fc-41a605f4a2bd/T13EN5HWYT2MKARPQW0371M53W/acc324e6-9570-466c-82e1-e3537978bc42"
           />
-          <input type="number" id="q2" placeholder="Type in the answer here!" />
+          <input type="number" id="q2" placeholder="Type in the answer here! (Input note: type in answer withough minute, e.g 12." />
           <button onclick="checkAnswer(2)">Submit Q2</button>
         </div>
       </div>
@@ -102,8 +102,8 @@
     <script>
       const correctPassword = "vks4bskl"; // 🔑 Viking password
       const correctAnswers = {
-        1: "?",
-        2: "?",
+        1: "(2.4;12)",
+        2: "21",
       };
 
       function checkPassword() {
@@ -162,3 +162,4 @@
     </script>
   </body>
 </html>
+
