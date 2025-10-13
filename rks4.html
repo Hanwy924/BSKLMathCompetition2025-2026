@@ -81,13 +81,13 @@
 
         <div class="question">
           <p><b>Q1:</b></p>
-          <input type="text" id="q1" placeholder="Type in the answer here!" />
+          <input type="text" id="q1" placeholder="Type in the answer here! (Input note: type in answer in the format of (a,b;c)" />
           <button onclick="checkAnswer(1)">Submit Q1</button>
         </div>
 
         <div class="question">
           <p><b>Q2:</b></p>
-          <input type="number" id="q2" placeholder="Type in the answer here!" />
+          <input type="number" id="q2" placeholder="Type in the answer here! (Input note: type in answer withought the minute, e.g 12." />
           <button onclick="checkAnswer(2)">Submit Q2</button>
         </div>
       </div>
@@ -96,8 +96,8 @@
     <script>
       const correctPassword = "rks4bskl"; // 🔑 Roman password
       const correctAnswers = {
-        1: "?",
-        2: "?",
+        1: "(2,4;12)",
+        2: "21",
       };
 
       function checkPassword() {
@@ -156,3 +156,4 @@
     </script>
   </body>
 </html>
+
