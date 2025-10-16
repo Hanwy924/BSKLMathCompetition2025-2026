@@ -14,7 +14,6 @@
         --card-bg: #2a2a40;
         --text-light: #f0f0f0;
       }
-
       body {
         margin: 0;
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -26,21 +25,13 @@
         padding: 20px;
         min-height: 100vh;
       }
-
       h1 {
         font-size: 2rem;
         margin-bottom: 20px;
-        background: linear-gradient(
-          90deg,
-          var(--red),
-          var(--blue),
-          var(--yellow),
-          var(--green)
-        );
+        background: linear-gradient(90deg, var(--red), var(--blue), var(--yellow), var(--green));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
-
       .login-box {
         background: var(--card-bg);
         padding: 20px;
@@ -48,7 +39,6 @@
         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
         margin-top: 100px;
       }
-
       input[type="password"] {
         padding: 10px;
         border-radius: 8px;
@@ -57,7 +47,6 @@
         width: 200px;
         margin-right: 10px;
       }
-
       button {
         padding: 8px 14px;
         border-radius: 8px;
@@ -72,12 +61,10 @@
       button:hover {
         transform: scale(1.05);
       }
-
       .error {
         color: var(--red);
         margin-top: 10px;
       }
-
       .result-card {
         background: var(--card-bg);
         border-radius: 12px;
@@ -89,26 +76,15 @@
         border-left: 6px solid;
         position: relative;
       }
-
-      .result-card.red {
-        border-color: var(--red);
-      }
-      .result-card.blue {
-        border-color: var(--blue);
-      }
-      .result-card.yellow {
-        border-color: var(--yellow);
-      }
-      .result-card.green {
-        border-color: var(--green);
-      }
-
+      .result-card.red { border-color: var(--red); }
+      .result-card.blue { border-color: var(--blue); }
+      .result-card.yellow { border-color: var(--yellow); }
+      .result-card.green { border-color: var(--green); }
       .meta {
         font-size: 0.9rem;
         opacity: 0.8;
         margin-bottom: 8px;
       }
-
       .answers {
         font-family: monospace;
         background: rgba(255, 255, 255, 0.05);
@@ -116,7 +92,6 @@
         border-radius: 8px;
         overflow-x: auto;
       }
-
       .delete-btn {
         position: absolute;
         top: 12px;
@@ -133,18 +108,13 @@
   </head>
   <body>
     <h1>Admin Panel</h1>
-
-    <!-- Login box -->
     <div id="login" class="login-box">
       <p>Enter admin password:</p>
       <input type="password" id="adminPassword" placeholder="Password" />
       <button onclick="checkPassword()">Login</button>
       <div id="loginError" class="error"></div>
     </div>
-
-    <!-- Results -->
     <div id="results" style="display: none; margin-top: 20px">Loading...</div>
-
     <script>
       const ADMIN_PASS = "admin123";
       const DELETE_PASS = "delete456";
@@ -164,43 +134,34 @@
 
       async function loadResults() {
         try {
-          const res = await fetch(
-            "https://quiz-backend-q4me.onrender.com/answers"
-          );
+          const res = await fetch("https://quiz-backend-q4me.onrender.com/answers");
           const data = await res.json();
-
           const resultsDiv = document.getElementById("results");
           resultsDiv.innerHTML = "";
-
           if (data.length === 0) {
             resultsDiv.textContent = "No submissions yet.";
             return;
           }
-
           data.forEach((item, index) => {
             const card = document.createElement("div");
             card.className = "result-card";
-
-            // Assign theme color by house
             if (item.house === "Norman") card.classList.add("red");
             if (item.house === "Viking") card.classList.add("yellow");
             if (item.house === "Saxon") card.classList.add("green");
             if (item.house === "Roman") card.classList.add("blue");
-
             card.innerHTML = `
               <div class="meta">
-                #${index + 1} • <strong>${item.name}</strong> • ${
-              item.house
-            } • ${new Date(item.timestamp).toLocaleString()}
+                #${index + 1} • <strong>${item.name}</strong> • ${item.house} • ${new Date(item.timestamp).toLocaleString()}
               </div>
-              <div class="answers">Q${item.questionNumber}: ${item.answer}</div>
+              <div class="answers">
+                KS: ${item.ks || "N/A"} • Q${item.questionNumber}: ${item.answer}
+              </div>
               <button class="delete-btn" onclick="deleteResult(${index})">Delete</button>
             `;
             resultsDiv.appendChild(card);
           });
         } catch (err) {
-          document.getElementById("results").textContent =
-            "Error loading results.";
+          document.getElementById("results").textContent = "Error loading results.";
         }
       }
 
@@ -210,14 +171,7 @@
           alert("Wrong delete password!");
           return;
         }
-
-        const res = await fetch(
-          `https://quiz-backend-q4me.onrender.com/delete/${index}`,
-          {
-            method: "DELETE",
-          }
-        );
-
+        const res = await fetch(`https://quiz-backend-q4me.onrender.com/delete/${index}`, { method: "DELETE" });
         if (res.ok) {
           alert("Result deleted!");
           loadResults();
